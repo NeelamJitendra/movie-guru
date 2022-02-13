@@ -1,0 +1,32 @@
+[
+    {
+        "name": "Jitendra",
+        "phoneNo":"07678121",
+        "Email": "Jitendra@gmail.com",
+        "reservedSeats":"1A,2A,3A,4A"
+    },
+    {
+        "name": "Mani",
+        "phoneNo":"07678122",
+        "Email": "Mani@gmail.com",
+        "reservedSeats":"1B,2B,3B,4B"
+    },
+    {
+        "name": "Shiva",
+        "phoneNo":"07678123",
+        "Email": "Shiva@gmail.com",
+        "reservedSeats":"5A,6A,7A,8A"
+    },
+    {
+        "name": "Uday",
+        "phoneNo":"07678123",
+        "Email": "Uday@gmail.com",
+        "reservedSeats":"1C,2C,3C,4C"
+    },
+    {
+        "name": "Vamsi",
+        "phoneNo":"07678124",
+        "Email": "Vamsi@gmail.com",
+        "reservedSeats":"5D,6D,7D,8D"
+    }
+]

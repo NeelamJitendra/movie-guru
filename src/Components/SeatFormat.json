@@ -1,0 +1,92 @@
+[
+    {"label": "Bheemla Nayak",
+     "SeatFor":[{
+        "endRow": 4,
+        "startRow": 1,
+        "letterTill":"H"
+    },{
+        "endRow": 5,
+        "startRow": 5,
+        "letterTill":"I"
+    },{
+        "endRow": 8,
+        "startRow": 6,
+        "letterTill":"H"
+    },{
+        "endRow": 9,
+        "startRow": 9,
+        "letterTill":"I"
+    },{
+        "endRow": 10,
+        "startRow": 10,
+        "letterTill":"G"
+    },{
+        "endRow": 12,
+        "startRow": 11,
+        "letterTill":"H"
+    },{
+        "endRow": 13,
+        "startRow": 13,
+        "letterTill":"K"
+    }]},
+    {"label": "Acharya",
+        "SeatFor":[{
+           "endRow": 4,
+           "startRow": 1,
+           "letterTill":"H"
+       },{
+           "endRow": 5,
+           "startRow": 5,
+           "letterTill":"I"
+       },{
+           "endRow": 8,
+           "startRow": 6,
+           "letterTill":"H"
+       },{
+           "endRow": 9,
+           "startRow": 9,
+           "letterTill":"I"
+       },{
+           "endRow": 10,
+           "startRow": 10,
+           "letterTill":"G"
+       },{
+           "endRow": 12,
+           "startRow": 11,
+           "letterTill":"H"
+       },{
+           "endRow": 19,
+           "startRow": 13,
+           "letterTill":"K"
+       }]},
+       {"label": "Sarkaru vari pata",
+        "SeatFor":[{
+           "endRow": 4,
+           "startRow": 1,
+           "letterTill":"H"
+       },{
+           "endRow": 5,
+           "startRow": 5,
+           "letterTill":"I"
+       },{
+           "endRow": 8,
+           "startRow": 6,
+           "letterTill":"H"
+       },{
+           "endRow": 9,
+           "startRow": 9,
+           "letterTill":"I"
+       },{
+           "endRow": 10,
+           "startRow": 10,
+           "letterTill":"G"
+       },{
+           "endRow": 12,
+           "startRow": 11,
+           "letterTill":"H"
+       },{
+           "endRow": 17,
+           "startRow": 13,
+           "letterTill":"K"
+       }]}
+]
