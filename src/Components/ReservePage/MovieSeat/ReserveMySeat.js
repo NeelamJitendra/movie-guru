@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import  './ReserveMySeat.css';
 import Seats from './Seats';
+import { getApi } from "../../Api";
 
 const createSeats = (rows, startIndex, endLetter) => {
     let i = 0;
@@ -20,7 +21,7 @@ const createSeats = (rows, startIndex, endLetter) => {
             
         }
         if(j < rows + 1) {
-            rowArr.push(j + k);
+            rowArr.push(k + j);
             k = String.fromCharCode(k.charCodeAt(0) + 1);
         }
     }
@@ -38,6 +39,15 @@ const ReserveMySeat = (props) => {
       return totalSeatArr=concatArr;
     }); 
   }
+
+  useEffect(() => {
+    async function fetchReservedList() {
+      let result = await getApi("/reserved");
+      let response = result.data;
+      setIsReserved(response);
+    }
+    fetchReservedList();
+  }, []);
 
   const [isBooked, setIsBooked] = useState(['1A', '1B', '2A', '2B']);
   const [isReserved, setIsReserved] = useState(['10A', '10B'])
