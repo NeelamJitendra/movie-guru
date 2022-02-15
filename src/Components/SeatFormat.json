@@ -1,5 +1,6 @@
 [
-    {"label": "Bheemla Nayak",
+    {"movie": "Bheemla Nayak",
+     "city": "Gothenburg",
      "SeatFor":[{
         "endRow": 4,
         "startRow": 1,
@@ -29,7 +30,8 @@
         "startRow": 13,
         "letterTill":"K"
     }]},
-    {"label": "Acharya",
+    {"movie": "Acharya",
+        "city": "Stockholm",
         "SeatFor":[{
            "endRow": 4,
            "startRow": 1,
@@ -59,7 +61,8 @@
            "startRow": 13,
            "letterTill":"K"
        }]},
-       {"label": "Sarkaru vari pata",
+       {"movie": "Sarkaru vari pata",
+        "city": "Gothenburg",
         "SeatFor":[{
            "endRow": 4,
            "startRow": 1,

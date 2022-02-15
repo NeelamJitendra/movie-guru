@@ -1,4 +1,12 @@
-import * as React from 'react';
+import React, {useState} from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import SeatFormat from '../SeatFormat.json';
 import ReservedList from '../ReservedList.json';
 import BookedList from '../BookedList.json';
 import ResBookTable from './ResBookTable';
@@ -43,14 +51,50 @@ const BookColumns = [
     },
   ];
 
-export default function StickyHeadTable() {
+export default function BookingPage() {
+  const [expanded, setExpanded] = useState('');
+  const [movie, setMovie] = useState([]);
 
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
   return (
   <div>
-      <h2>Reserved List</h2>
-      <ResBookTable ReservedList={ReservedList} columns={ReserveColumns}/>
-      <h2>Booked List</h2>
-      <ResBookTable ReservedList={BookedList} columns={BookColumns}/>
+    <Autocomplete
+      disablePortal
+      disableClearable
+      id="MovieList"
+      getOptionLabel={(option) => option.movie+" - "+option.city}
+      options={SeatFormat}
+      sx={{ width: 300, m: '10px' }}
+      renderInput={(params) => <TextField {...params} label="Select Movie - City" />}
+      onChange={(e, newValue)=>newValue!==null ? setMovie(newValue): []}
+      />
+    {movie.length!==0 ?
+      <div>
+        <Accordion expanded={expanded === 'reservedList'} onChange={handleChange('reservedList')}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="bookedList"
+            id="reservedList">
+            <Typography>Reserved List</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ResBookTable ReservedList={ReservedList} columns={ReserveColumns}/>
+          </AccordionDetails>
+        </Accordion>
+        <Accordion expanded={expanded === 'bookedList'} onChange={handleChange('bookedList')}>
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="bookedList"
+            id="bookedList">
+            <Typography>Booked List</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <ResBookTable ReservedList={BookedList} columns={BookColumns}/>
+          </AccordionDetails>
+        </Accordion>
+      </div>: ''}
   </div>
   );
 }

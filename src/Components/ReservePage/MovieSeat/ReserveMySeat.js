@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import  './BookMySeats.css';
+import  './ReserveMySeat.css';
 import Seats from './Seats';
 
 const createSeats = (rows, startIndex, endLetter) => {
@@ -28,7 +28,7 @@ const createSeats = (rows, startIndex, endLetter) => {
 
 }
 
-const BookMySeats = (props) => {
+const ReserveMySeat = (props) => {
   let totalSeatArr = [];
   
   if(props.movie !== undefined){
@@ -39,8 +39,9 @@ const BookMySeats = (props) => {
     }); 
   }
 
-  const [isBooked, setIsBooked] = useState(['1A', '1B', '2A', '2B', '10A', '10B']);
-  const [urBooking, setUrBooking] = useState([]);
+  const [isBooked, setIsBooked] = useState(['1A', '1B', '2A', '2B']);
+  const [isReserved, setIsReserved] = useState(['10A', '10B'])
+  const [urSelection, setUrSelection] = useState([]);
   const [bookedStatus, setBookedStatus] = useState('');
   const [numberOfSeats, setNumberOfSeats] = useState(0);
   const [name, setName] = useState('');
@@ -49,16 +50,16 @@ const BookMySeats = (props) => {
   const addSeat = (ev) => {
       if(numberOfSeats && !ev.target.className.includes('disabled')) {
           const seatsToBook = parseInt(numberOfSeats, 10);
-        if(urBooking.length <= seatsToBook) {
-            if (urBooking.includes(ev.target.innerText)) {
-                const newAvailable = urBooking.filter(seat => seat !== ev.target.innerText);
-                setUrBooking(newAvailable);
-            } else if(urBooking.length < numberOfSeats) {
-                setUrBooking([...urBooking, ev.target.innerText]);
+        if(urSelection.length <= seatsToBook) {
+            if (urSelection.includes(ev.target.innerText)) {
+                const newAvailable = urSelection.filter(seat => seat !== ev.target.innerText);
+                setUrSelection(newAvailable);
+            } else if(urSelection.length < numberOfSeats) {
+                setUrSelection([...urSelection, ev.target.innerText]);
 
-            } else if (urBooking.length === seatsToBook) {
-                urBooking.shift();
-                setUrBooking([...urBooking, ev.target.innerText]);
+            } else if (urSelection.length === seatsToBook) {
+                urSelection.shift();
+                setUrSelection([...urSelection, ev.target.innerText]);
             }
         }
       }
@@ -66,43 +67,63 @@ const BookMySeats = (props) => {
 
   const confirmBooking = () => {
       setBookedStatus('Mr/Mrs '+name+' you have successfully Reserved the following seats: ');
-      urBooking.forEach(seat => {
+      urSelection.forEach(seat => {
            setBookedStatus(prevState => {
                return prevState + seat + ' ';
            })
       });
-      const newAvailableSeats = isBooked.filter(seat => !urBooking.includes(seat));
+      const newAvailableSeats = isBooked.filter(seat => !urSelection.includes(seat));
       setIsBooked(newAvailableSeats);
-      setUrBooking([]);
+      setUrSelection([]);
       setNumberOfSeats(0);
       setName('');
       setPhoneNo('');
       setEmail('');
   };
-  console.log(phoneNo.length);
 
   return (
-        <div>
-            <p style={{paddingLeft:'20px'}}>How many seats would you like to book?</p>
+        <div style={{paddingLeft:'10px'}}>
+            <p>Enter number of seats (Max 5 per reservation)</p>
             
-            <Box sx={{'& .MuiTextField-root': { m: '10px', width: '40ch', marginTop:'-12px'}}}>
+            <Box sx={{'& .MuiTextField-root': { width: '40ch', marginTop:'-12px'}}}>
                 <TextField variant="outlined" type="number" value={numberOfSeats} 
-                    onChange={(ev) => setNumberOfSeats(ev.target.value)}/>
+                    InputProps={{ inputProps: { min: "0", max: "5"} }}
+                    onChange={(ev) => ev.target.value <=5 ? setNumberOfSeats(ev.target.value): setNumberOfSeats(5) }/>
             </Box>
+            <div>
+                <span style={{"display": "flex", "marginTop":10}}>Booked Seats
+                    <Box
+                        sx={{
+                            width: 20,
+                            height: 20,
+                            marginLeft:6,
+                            backgroundColor: 'rgb(165, 15, 15)'}}/>
+                </span>
+                <span  style={{"display": "flex", "marginTop":10}}>Reserved Seats
+                    <Box
+                        sx={{
+                            width: 20,
+                            height: 20,
+                            marginLeft:6,
+                            backgroundColor: '#a9b409'}}/>
+                            
+                </span>
+            </div>
             <div className='screenDiv'>
                 <span className='screen'>Screen</span> 
             </div> 
             <Seats values={totalSeatArr}
                    isBooked={isBooked}
-                   urBooking={urBooking}
+                   isReserved={isReserved}
+                   urSelection={urSelection}
                    addSeat={addSeat}/>
              <Box sx={{'& .MuiTextField-root': { m: '10px', width: '30ch' }}}>
                 <TextField id="name" label="Name *" variant="outlined" value={name} onChange={e=>setName(e.target.value)}/>
                 <TextField id="phone" type="number" label="Phone Number *" variant="outlined" value={phoneNo} onChange={e=>setPhoneNo(e.target.value)}/>
-                <TextField id="email" type="email" label="Email *" variant="outlined" value={email} onChange={e=>setEmail(e.target.value)}/>
+                <TextField id="email" type="email" label="Email *" variant="outlined" value={email} maxlength="10"onChange={e=>setEmail(e.target.value)}/>
             </Box>
             <Box m={'10px'}>
-            <Button variant="contained" disabled={!name|| phoneNo.length <= 8 || !email || urBooking.length===0} onClick={()=>confirmBooking()}>
+            <Button variant="contained" disabled={!name|| phoneNo.length <= 8 || !email || urSelection.length===0} onClick={()=>confirmBooking()}>
                 Reserve Seats
             </Button>
             </Box>
@@ -112,4 +133,4 @@ const BookMySeats = (props) => {
     );
 }
 
-export default BookMySeats;
+export default ReserveMySeat;

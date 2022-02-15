@@ -1,6 +1,6 @@
 import React from 'react';
 import MvSeat from './chair.png';
-import  './BookMySeats.css';
+import  './ReserveMySeat.css';
 
 const Seats = (props) => {
 
@@ -13,14 +13,18 @@ const Seats = (props) => {
               return (
                 <tr>
                     {row.map(seat=>{
-                        const urBooking = props.urBooking.includes(seat);
+                        const urSelection = props.urSelection.includes(seat);
+                        const isReserved = props.isReserved.includes(seat);
                         const isBooked = props.isBooked.includes(seat);
                         let seatClass;
                         if(isBooked) {
-                            seatClass = 'disabled';
+                            seatClass = 'isBooked';
                         }
-                        if(urBooking) {
-                            seatClass = 'booked';
+                        if(isReserved) {
+                            seatClass = 'isReserved';
+                        }
+                        if(urSelection) {
+                            seatClass = 'urSelection';
                         }
                         return(<td  className={seatClass} onClick={props.addSeat} key={seat}>        
                             <span className='lable'>{seat}</span>

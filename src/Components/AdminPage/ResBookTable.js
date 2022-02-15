@@ -14,7 +14,6 @@ import TableRow from '@mui/material/TableRow';
 export default function ResBookTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  console.log(props);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };

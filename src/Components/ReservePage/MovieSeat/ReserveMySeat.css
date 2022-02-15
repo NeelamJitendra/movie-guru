@@ -11,13 +11,18 @@
     cursor: pointer;
 }
 
-.disabled {
-    background-color: grey;
+.isBooked {
+    background-color: rgb(165, 15, 15);
     border-radius: 5px !important;
 }
 
-.booked {
-    background-color: #00ff22;
+.urSelection {
+    background-color: #16b12b;
+    border-radius: 5px !important;
+}
+
+.isReserved {
+    background-color: #a9b409;
     border-radius: 5px !important;
 }
 .lable{
