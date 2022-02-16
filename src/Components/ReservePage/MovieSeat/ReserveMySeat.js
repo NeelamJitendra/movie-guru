@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import  './ReserveMySeat.css';
 import Seats from './Seats';
-import { getApi } from "../../Api";
+import { getApi, reserveApi } from "../../Api";
 
 const createSeats = (rows, startIndex, endLetter) => {
     let i = 0;
@@ -42,12 +42,12 @@ const ReserveMySeat = (props) => {
 
   useEffect(() => {
     async function fetchReservedList() {
-      let result = await getApi("/reserved");
+      let result = await getApi("/reserved", props.movie.movie, props.movie.city );
       let response = result.data;
       setIsReserved(response);
     }
     fetchReservedList();
-  }, []);
+  }, [props.movie]);
 
   const [isBooked, setIsBooked] = useState(['1A', '1B', '2A', '2B']);
   const [isReserved, setIsReserved] = useState(['10A', '10B'])
@@ -75,13 +75,24 @@ const ReserveMySeat = (props) => {
       }
     };
 
-  const confirmBooking = () => {
+    async function confirmReservation () {
       setBookedStatus('Mr/Mrs '+name+' you have successfully Reserved the following seats: ');
       urSelection.forEach(seat => {
            setBookedStatus(prevState => {
                return prevState + seat + ' ';
            })
       });
+        let body= {
+            "city": props.movie.city,
+            "movie": props.movie.movie,
+            "emailid": email,
+            "name": name,
+            "mobilenumber": phoneNo,
+            "seats": urSelection
+        }
+        await reserveApi("/reserved", body );
+        
+      
       const newAvailableSeats = isBooked.filter(seat => !urSelection.includes(seat));
       setIsBooked(newAvailableSeats);
       setUrSelection([]);
@@ -133,7 +144,7 @@ const ReserveMySeat = (props) => {
                 <TextField id="email" type="email" label="Email *" variant="outlined" value={email} maxlength="10"onChange={e=>setEmail(e.target.value)}/>
             </Box>
             <Box m={'10px'}>
-            <Button variant="contained" disabled={!name|| phoneNo.length <= 8 || !email || urSelection.length===0} onClick={()=>confirmBooking()}>
+            <Button variant="contained" disabled={!name|| phoneNo.length <= 8 || !email || urSelection.length===0} onClick={()=>confirmReservation()}>
                 Reserve Seats
             </Button>
             </Box>

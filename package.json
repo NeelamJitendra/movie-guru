@@ -40,6 +40,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "BaseUrlApi": "https://assignment-portal-backend-dev.azurewebsites.net"
+  }
 }
