@@ -5,8 +5,9 @@ import Box from '@mui/material/Box';
 import  './ReserveMySeat.css';
 import Seats from './Seats';
 import { getApi, reserveApi } from "../../Api";
+import ReservationBox from '../../DialogBox/ReservationBox';
 
-const createSeats = (rows, startIndex, endLetter) => {
+const createLetterSeats = (rows, startIndex, endLetter) => {
     let i = 0;
     let j = startIndex;
     let k = 'A';
@@ -31,57 +32,72 @@ const createSeats = (rows, startIndex, endLetter) => {
 
 const ReserveMySeat = (props) => {
   let totalSeatArr = [];
-  
+  let premiumSeatArr=[];
   if(props.movie !== undefined){
-    props.movie.SeatFor.map(e => {
-      const seatArr= createSeats(e.endRow, e.startRow, e.letterTill);
-      const concatArr=totalSeatArr.concat(seatArr);
-      return totalSeatArr=concatArr;
-    }); 
+      if(props.movie.type==='letter'){
+        props.movie.SeatFor.map(e => {
+            const seatArr= createLetterSeats(e.endRow, e.startRow, e.letterTill);
+            const concatArr=totalSeatArr.concat(seatArr);
+            return totalSeatArr=concatArr;
+        });
+      }
+      else{
+        props.movie.SeatFor.map(e => {
+            let rowArr=[]
+            for(let i =e.startRow; i <= e.endRow; i++) {
+                rowArr.push(i);
+            }
+            return totalSeatArr.push(rowArr);
+        });
+        if(props.movie.PremiumSeatFor){
+            props.movie.PremiumSeatFor.map(e => {
+                let rowArr=[]
+                for(let i =e.startRow; i <= e.endRow; i++) {
+                    rowArr.push(i);
+                }
+                return premiumSeatArr.push(rowArr);
+            })
+        }
+      }
+
+    
   }
 
   useEffect(() => {
     async function fetchReservedList() {
       let result = await getApi("/reserved", props.movie.movie, props.movie.city );
       let response = result.data;
-      setIsReserved(response);
+      setIsReserved(response.reservedList);
+      setIsBooked(response.bookedList);
     }
     fetchReservedList();
   }, [props.movie]);
 
-  const [isBooked, setIsBooked] = useState(['1A', '1B', '2A', '2B']);
-  const [isReserved, setIsReserved] = useState(['10A', '10B'])
+  const [isBooked, setIsBooked] = useState([]);
+  const [isReserved, setIsReserved] = useState([])
   const [urSelection, setUrSelection] = useState([]);
-  const [bookedStatus, setBookedStatus] = useState('');
-  const [numberOfSeats, setNumberOfSeats] = useState(0);
   const [name, setName] = useState('');
   const [phoneNo, setPhoneNo] = useState('');
   const [email, setEmail] = useState('');
-  const addSeat = (ev) => {
-      if(numberOfSeats && !ev.target.className.includes('disabled')) {
-          const seatsToBook = parseInt(numberOfSeats, 10);
-        if(urSelection.length <= seatsToBook) {
-            if (urSelection.includes(ev.target.innerText)) {
-                const newAvailable = urSelection.filter(seat => seat !== ev.target.innerText);
-                setUrSelection(newAvailable);
-            } else if(urSelection.length < numberOfSeats) {
-                setUrSelection([...urSelection, ev.target.innerText]);
+  const [open, setOpen] = useState(false);
+  const [dialogTitle, setDialogTitle] = useState("");
+  const [dialogContent, setDialogContent] = useState("");
 
-            } else if (urSelection.length === seatsToBook) {
-                urSelection.shift();
-                setUrSelection([...urSelection, ev.target.innerText]);
-            }
+  const addSeat = (ev) => {
+        if (urSelection.includes(ev)) {
+            const newAvailable = urSelection.filter(seat => seat !== ev);
+            setUrSelection(newAvailable);
+        }else if(urSelection.length!==5){
+        setUrSelection([...urSelection, ev]);
+        }else if (urSelection.length === 5) {
+            urSelection.shift();
+            setUrSelection([...urSelection, ev]);
         }
-      }
     };
 
     async function confirmReservation () {
-      setBookedStatus('Mr/Mrs '+name+' you have successfully Reserved the following seats: ');
-      urSelection.forEach(seat => {
-           setBookedStatus(prevState => {
-               return prevState + seat + ' ';
-           })
-      });
+        props.setLoading(true);
+      
         let body= {
             "city": props.movie.city,
             "movie": props.movie.movie,
@@ -90,27 +106,29 @@ const ReserveMySeat = (props) => {
             "mobilenumber": phoneNo,
             "seats": urSelection
         }
-        await reserveApi("/reserved", body );
-        
+        await reserveApi("/reserved", body )
+            .then(()=>
+                setDialogTitle('Thank You'),
+                setDialogContent('Mr/Mrs '+name+' you have successfully Reserved the following seats: '+urSelection),
+                setOpen(true),
+                props.setLoading(false));
       
-      const newAvailableSeats = isBooked.filter(seat => !urSelection.includes(seat));
-      setIsBooked(newAvailableSeats);
-      setUrSelection([]);
-      setNumberOfSeats(0);
-      setName('');
-      setPhoneNo('');
-      setEmail('');
+        const newAvailableSeats = isBooked.filter(seat => !urSelection.includes(seat));
+        setIsBooked(newAvailableSeats);
+        setUrSelection([]);
+        setName('');
+        setPhoneNo('');
+        setEmail('');
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
         <div style={{paddingLeft:'10px'}}>
-            <p>Enter number of seats (Max 5 per reservation)</p>
+            <h2>Max 5 per reservation</h2>
             
-            <Box sx={{'& .MuiTextField-root': { width: '40ch', marginTop:'-12px'}}}>
-                <TextField variant="outlined" type="number" value={numberOfSeats} 
-                    InputProps={{ inputProps: { min: "0", max: "5"} }}
-                    onChange={(ev) => ev.target.value <=5 ? setNumberOfSeats(ev.target.value): setNumberOfSeats(5) }/>
-            </Box>
             <div>
                 <span style={{"display": "flex", "marginTop":10}}>Booked Seats
                     <Box
@@ -129,11 +147,27 @@ const ReserveMySeat = (props) => {
                             backgroundColor: '#a9b409'}}/>
                             
                 </span>
+                <span  style={{"display": "flex", "marginTop":10}}>Premium Seats
+                    <Box
+                        sx={{
+                            width: 20,
+                            height: 20,
+                            marginLeft:6,
+                            backgroundColor: '#5f92d4'}}/>
+                            
+                </span>
             </div>
             <div className='screenDiv'>
                 <span className='screen'>Screen</span> 
             </div> 
             <Seats values={totalSeatArr}
+                   isBooked={isBooked}
+                   isReserved={isReserved}
+                   urSelection={urSelection}
+                   addSeat={addSeat}/>
+                   <br/>
+            <Seats values={premiumSeatArr}
+                   premiumSeat={true}
                    isBooked={isBooked}
                    isReserved={isReserved}
                    urSelection={urSelection}
@@ -144,11 +178,11 @@ const ReserveMySeat = (props) => {
                 <TextField id="email" type="email" label="Email *" variant="outlined" value={email} maxlength="10"onChange={e=>setEmail(e.target.value)}/>
             </Box>
             <Box m={'10px'}>
-            <Button variant="contained" disabled={!name|| phoneNo.length <= 8 || !email || urSelection.length===0} onClick={()=>confirmReservation()}>
+            <Button variant="contained" /*disabled={!name|| phoneNo.length <= 8 || !email || urSelection.length===0}*/ onClick={()=>{confirmReservation()}}>
                 Reserve Seats
             </Button>
             </Box>
-            <p style={{paddingLeft:'20px'}}>{bookedStatus}</p>
+            <ReservationBox open={open} handleClose={()=>handleClose()} dialogTitle={dialogTitle} dialogContent={dialogContent}/>
         </div>
 
     );

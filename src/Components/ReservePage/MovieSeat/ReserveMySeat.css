@@ -25,6 +25,12 @@
     background-color: #a9b409;
     border-radius: 5px !important;
 }
+
+.premiumSeat {
+    background-color: #5f92d4;
+    border-radius: 5px !important;
+}
+
 .lable{
     position: absolute;
     padding-left: 13.4pt;

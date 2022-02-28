@@ -1,6 +1,7 @@
 [
     {"movie": "Bheemla Nayak",
-     "city": "Gothenburg",
+     "city": "Stockholm",
+     "type":"letter",
      "SeatFor":[{
         "endRow": 4,
         "startRow": 1,
@@ -32,6 +33,7 @@
     }]},
     {"movie": "RRR",
         "city": "stockholm",
+        "type":"letter",
         "SeatFor":[{
            "endRow": 4,
            "startRow": 1,
@@ -63,6 +65,7 @@
        }]},
        {"movie": "Sarkaru vari pata",
         "city": "Gothenburg",
+        "type":"letter",
         "SeatFor":[{
            "endRow": 4,
            "startRow": 1,
@@ -91,5 +94,54 @@
            "endRow": 17,
            "startRow": 13,
            "letterTill":"K"
-       }]}
+       }]},
+       {"movie": "Bheemla Nayak",
+        "city": "Gothenburg",
+        "type":"number",
+        "SeatFor":[
+            {
+                "startRow": 1,
+                "endRow": 13
+            },{
+                "startRow": 14,
+                "endRow": 30
+            },{
+                "startRow": 31,
+                "endRow": 47
+            },{
+                "startRow": 48,
+                "endRow": 64
+            },{
+                "startRow": 65,
+                "endRow": 81
+            },{
+                "startRow": 82,
+                "endRow": 98
+            },{
+                "startRow": 99,
+                "endRow": 115
+            },{
+                "startRow": 116,
+                "endRow": 131
+            },{
+                "startRow": 132,
+                "endRow": 147
+            }
+        ],
+        "PremiumSeatFor":[
+            {
+                "startRow": 148,
+                "endRow": 159
+            },{
+                "startRow": 160,
+                "endRow": 171
+            },{
+                "startRow": 172,
+                "endRow": 183
+            },{
+                "startRow": 184,
+                "endRow": 193
+            }
+        ]
+    }
 ]

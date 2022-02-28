@@ -16,17 +16,21 @@ const Seats = (props) => {
                         const urSelection = props.urSelection.includes(seat);
                         const isReserved = props.isReserved.includes(seat);
                         const isBooked = props.isBooked.includes(seat);
+                        const premiumSeat= props.premiumSeat;
                         let seatClass;
                         if(isBooked) {
                             seatClass = 'isBooked';
                         }
-                        if(isReserved) {
+                        else if(isReserved) {
                             seatClass = 'isReserved';
                         }
-                        if(urSelection) {
+                        else if(urSelection) {
                             seatClass = 'urSelection';
                         }
-                        return(<td  className={seatClass} onClick={props.addSeat} key={seat}>        
+                        else if(premiumSeat){
+                            seatClass = 'premiumSeat';
+                        }
+                        return(<td  className={seatClass} onClick={()=>isBooked || isReserved ? '' : props.addSeat(seat)} key={seat}>        
                             <span className='lable'>{seat}</span>
                             <img src={MvSeat} alt="seat" className='seat'/>
                         </td>)
